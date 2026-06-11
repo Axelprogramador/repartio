@@ -38,10 +38,15 @@ class GroupDetailViewModel @Inject constructor(
             addMemberUseCase(groupId, name)
         }
     }
-
-    fun addExpense(payerId: Long, description: String, amount: Double) {
+    
+    fun addExpense(
+        payerId: Long,
+        description: String,
+        amount: Double,
+        participants: List<Pair<Long, Double>>
+    ) {
         viewModelScope.launch {
-            addExpenseUseCase(groupId, payerId, description, amount)
+            addExpenseUseCase(groupId, payerId, description, amount, participants)
         }
     }
 }

@@ -19,16 +19,26 @@ class CalculateBalancesUseCase @Inject constructor() {
         if (members.isEmpty() || expenses.isEmpty()) return emptyList()
 
         val memberMap = members.associateBy { it.id }
-        val totalExpenses = expenses.sumOf { it.amount }
-        val sharePerPerson = totalExpenses / members.size
 
         // Calcula el balance neto de cada miembro: positivo = le deben, negativo = debe
         val balances = members.associate { it.id to 0.0 }.toMutableMap()
+
         expenses.forEach { expense ->
+            // El pagador siempre suma lo que adelantó
             balances[expense.payerId] = (balances[expense.payerId] ?: 0.0) + expense.amount
-        }
-        balances.keys.forEach { id ->
-            balances[id] = (balances[id] ?: 0.0) - sharePerPerson
+
+            if (expense.participants.isEmpty()) {
+                // Sin participantes— reparto equitativo entre todos
+                val share = expense.amount / members.size
+                members.forEach { member ->
+                    balances[member.id] = (balances[member.id] ?: 0.0) - share
+                }
+            } else {
+                // Con participantes— cada uno resta su parte acordada
+                expense.participants.forEach { participant ->
+                    balances[participant.memberId] = (balances[participant.memberId] ?: 0.0) - participant.amountOwed
+                }
+            }
         }
 
         // Empareja deudores con quienes pagaron de más
@@ -39,7 +49,7 @@ class CalculateBalancesUseCase @Inject constructor() {
 
         val settlements = mutableListOf<Settlement>()
 
-        //bucle con el que emparejo deudores con acreedores uno a uno, reduce numero de trasferencias
+        // bucle con el que emparejo deudores con acreedores uno a uno, reduce numero de transferencias
         var i = 0; var j = 0
         while (i < debtors.size && j < creditors.size) {
             val (debtorId, debtorBalance) = debtors[i]
@@ -62,7 +72,7 @@ class CalculateBalancesUseCase @Inject constructor() {
             if (-debtors[i].second < 0.01) i++
             if (creditors[j].second < 0.01) j++
         }
-        //
+
         return settlements
     }
 }
