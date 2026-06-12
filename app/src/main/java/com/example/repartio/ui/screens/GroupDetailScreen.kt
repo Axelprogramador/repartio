@@ -4,6 +4,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
@@ -14,11 +15,14 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.repartio.R
 import com.example.repartio.domain.model.Member
+import com.example.repartio.ui.FormatUtils.formatCurrency
 import com.example.repartio.ui.viewmodel.GroupDetailViewModel
-import formatCurrency
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -40,7 +44,7 @@ fun GroupDetailScreen(
                 title = { Text(group?.name ?: "") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
-                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
+                        Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
                 }
             )
@@ -53,12 +57,12 @@ fun GroupDetailScreen(
                 ExtendedFloatingActionButton(
                     onClick = { showAddMemberDialog = true },
                     icon = { Icon(Icons.Default.Person, contentDescription = null) },
-                    text = { Text("Add member") },
+                    text = { Text(stringResource(R.string.add_member)) },
                 )
                 ExtendedFloatingActionButton(
                     onClick = { showAddExpenseDialog = true },
                     icon = { Icon(Icons.Default.Add, contentDescription = null) },
-                    text = { Text("Add expense") },
+                    text = { Text(stringResource(R.string.add_expense)) },
                 )
             }
         }
@@ -70,7 +74,7 @@ fun GroupDetailScreen(
         ) {
             item {
                 Text(
-                    "Members",
+                    stringResource(R.string.members),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
@@ -81,13 +85,18 @@ fun GroupDetailScreen(
 
             item {
                 Text(
-                    "Expenses",
+                    stringResource(R.string.expenses),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
             if (expenses.isEmpty()) {
-                item { Text("No expenses yet", style = MaterialTheme.typography.bodyMedium) }
+                item {
+                    Text(
+                        stringResource(R.string.no_expenses_yet),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             } else {
                 items(expenses) { expense ->
                     val payerName = members.find { it.id == expense.payerId }?.name ?: ""
@@ -95,8 +104,7 @@ fun GroupDetailScreen(
                         headlineContent = { Text(expense.description) },
                         supportingContent = {
                             Column {
-                                Text("Paid by $payerName")
-                                // Muestra el desglose de participantes si existe
+                                Text(stringResource(R.string.paid_by, payerName))
                                 if (expense.participants.isNotEmpty()) {
                                     expense.participants.forEach { participant ->
                                         val memberName = members.find { it.id == participant.memberId }?.name ?: ""
@@ -113,7 +121,7 @@ fun GroupDetailScreen(
                             Row(verticalAlignment = Alignment.CenterVertically) {
                                 Text(formatCurrency(expense.amount))
                                 IconButton(onClick = { viewModel.deleteExpense(expense) }) {
-                                    Icon(Icons.Default.Delete, contentDescription = "Delete expense")
+                                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_expense))
                                 }
                             }
                         }
@@ -124,13 +132,18 @@ fun GroupDetailScreen(
 
             item {
                 Text(
-                    "Settlements",
+                    stringResource(R.string.settlements),
                     style = MaterialTheme.typography.titleMedium,
                     modifier = Modifier.padding(vertical = 8.dp)
                 )
             }
             if (settlements.isEmpty()) {
-                item { Text("Everyone is even!", style = MaterialTheme.typography.bodyMedium) }
+                item {
+                    Text(
+                        stringResource(R.string.everyone_is_even),
+                        style = MaterialTheme.typography.bodyMedium
+                    )
+                }
             } else {
                 items(settlements) { settlement ->
                     SettlementItem(settlement)
@@ -183,20 +196,22 @@ private fun AddMemberDialog(
     var name by remember { mutableStateOf("") }
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Add member") },
+        title = { Text(stringResource(R.string.add_member)) },
         text = {
             OutlinedTextField(
                 value = name,
                 onValueChange = { name = it },
-                label = { Text("Name") },
+                label = { Text(stringResource(R.string.name)) },
                 singleLine = true
             )
         },
         confirmButton = {
-            TextButton(onClick = { if (name.isNotBlank()) onConfirm(name) }) { Text("Add") }
+            TextButton(onClick = { if (name.isNotBlank()) onConfirm(name) }) {
+                Text(stringResource(R.string.add))
+            }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
         }
     )
 }
@@ -225,7 +240,7 @@ private fun AddExpenseDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("Add expense") },
+        title = { Text(stringResource(R.string.add_expense)) },
         text = {
             Column(
                 verticalArrangement = Arrangement.spacedBy(8.dp),
@@ -234,7 +249,7 @@ private fun AddExpenseDialog(
                 OutlinedTextField(
                     value = description,
                     onValueChange = { description = it },
-                    label = { Text("Description") },
+                    label = { Text(stringResource(R.string.description)) },
                     singleLine = true,
                     modifier = Modifier.fillMaxWidth()
                 )
@@ -242,8 +257,9 @@ private fun AddExpenseDialog(
                 OutlinedTextField(
                     value = amount,
                     onValueChange = { amount = it },
-                    label = { Text("Total amount") },
+                    label = { Text(stringResource(R.string.total_amount)) },
                     singleLine = true,
+                    keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                     modifier = Modifier.fillMaxWidth()
                 )
 
@@ -255,7 +271,7 @@ private fun AddExpenseDialog(
                         value = selectedPayer?.name ?: "",
                         onValueChange = {},
                         readOnly = true,
-                        label = { Text("Paid by") },
+                        label = { Text(stringResource(R.string.paid_by_label)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(payerExpanded) },
                         modifier = Modifier
                             .menuAnchor()
@@ -277,21 +293,30 @@ private fun AddExpenseDialog(
                     }
                 }
 
-                Text("Split mode", style = MaterialTheme.typography.labelLarge)
+                Text(stringResource(R.string.split_mode), style = MaterialTheme.typography.labelLarge)
                 Row(horizontalArrangement = Arrangement.spacedBy(8.dp)) {
                     FilterChip(
                         selected = splitMode == SplitMode.EQUAL,
                         onClick = { splitMode = SplitMode.EQUAL },
-                        label = { Text("Equal") }
+                        label = { Text(stringResource(R.string.split_equally)) }
                     )
                     FilterChip(
                         selected = splitMode == SplitMode.CUSTOM,
                         onClick = { splitMode = SplitMode.CUSTOM },
-                        label = { Text("Custom") }
+                        label = { Text(stringResource(R.string.custom_amounts)) }
                     )
                 }
+                // Descripción del modo seleccionado para guiar al usuario
+                Text(
+                    text = if (splitMode == SplitMode.EQUAL)
+                        stringResource(R.string.split_equally_hint)
+                    else
+                        stringResource(R.string.custom_amounts_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.secondary
+                )
 
-                Text("Participants", style = MaterialTheme.typography.labelLarge)
+                Text(stringResource(R.string.participants), style = MaterialTheme.typography.labelLarge)
                 members.forEach { member ->
                     Row(
                         verticalAlignment = Alignment.CenterVertically,
@@ -309,8 +334,9 @@ private fun AddExpenseDialog(
                             OutlinedTextField(
                                 value = customAmounts[member.id] ?: "",
                                 onValueChange = { customAmounts[member.id] = it },
-                                label = { Text("Amount") },
+                                label = { Text(stringResource(R.string.amount)) },
                                 singleLine = true,
+                                keyboardOptions = KeyboardOptions(keyboardType = KeyboardType.Decimal),
                                 modifier = Modifier.width(100.dp)
                             )
                         } else if (splitMode == SplitMode.EQUAL && participantSelected[member.id] == true) {
@@ -363,10 +389,10 @@ private fun AddExpenseDialog(
                 }
 
                 onConfirm(payer.id, description, amountDouble, participants)
-            }) { Text("Add") }
+            }) { Text(stringResource(R.string.add)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
         }
     )
 }

@@ -1,0 +1,43 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Repartio</string>
+
+    <!-- General -->
+    <string name="add">Añadir</string>
+    <string name="cancel">Cancelar</string>
+    <string name="create">Crear</string>
+    <string name="back">Atrás</string>
+    <string name="name">Nombre</string>
+    <string name="amount">Importe</string>
+    <string name="description">Descripción</string>
+
+    <!-- Pantalla lista de grupos -->
+    <string name="no_groups_yet">Sin grupos. ¡Crea uno!</string>
+    <string name="new_group">Nuevo grupo</string>
+    <string name="group_name">Nombre del grupo</string>
+    <string name="add_group">Añadir grupo</string>
+    <string name="delete_group">Eliminar grupo</string>
+
+    <!-- Pantalla detalle de grupo -->
+    <string name="members">Miembros</string>
+    <string name="expenses">Gastos</string>
+    <string name="settlements">Liquidaciones</string>
+    <string name="no_expenses_yet">Sin gastos todavía</string>
+    <string name="everyone_is_even">¡Todos están al día!</string>
+    <string name="paid_by">Pagado por %s</string>
+    <string name="add_member">Añadir miembro</string>
+    <string name="add_expense">Añadir gasto</string>
+    <string name="delete_expense">Eliminar gasto</string>
+
+    <!-- Diálogo añadir gasto -->
+    <string name="total_amount">Importe total</string>
+    <string name="paid_by_label">Pagado por</string>
+    <string name="split_mode">Modo de reparto</string>
+    <string name="split_equally">A partes iguales</string>
+    <string name="split_equally_hint">El total se divide equitativamente entre los participantes seleccionados</string>
+    <string name="custom_amounts">Importes personalizados</string>
+    <string name="custom_amounts_hint">Establece importes específicos. Deja en blanco para repartir el resto automáticamente</string>
+    <string name="equal">Equitativo</string>
+    <string name="custom">Personalizado</string>
+    <string name="participants">Participantes</string>
+</resources>

@@ -11,8 +11,10 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.repartio.R
 import com.example.repartio.domain.model.Group
 import com.example.repartio.ui.viewmodel.GroupViewModel
 
@@ -27,23 +29,26 @@ fun GroupListScreen(
     Scaffold(
         floatingActionButton = {
             FloatingActionButton(onClick = { showDialog = true }) {
-                Icon(Icons.Default.Add, contentDescription = "Add group")
+                Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_group))
             }
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
             Text(
-                text = "Repartio",
+                text = stringResource(R.string.app_name),
                 style = MaterialTheme.typography.headlineMedium,
                 modifier = Modifier.padding(16.dp)
             )
 
             if (groups.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
-                    Text("No groups yet. Create one!", style = MaterialTheme.typography.bodyLarge)
+                    Text(
+                        stringResource(R.string.no_groups_yet),
+                        style = MaterialTheme.typography.bodyLarge
+                    )
                 }
             } else {
-                LazyColumn {  //RecyclerView
+                LazyColumn {
                     items(groups, key = { it.id }) { group ->
                         GroupItem(
                             group = group,
@@ -77,7 +82,7 @@ private fun GroupItem(
         headlineContent = { Text(group.name) },
         trailingContent = {
             IconButton(onClick = onDelete) {
-                Icon(Icons.Default.Delete, contentDescription = "Delete group")
+                Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_group))
             }
         },
         modifier = Modifier.clickable { onClick() }
@@ -94,22 +99,22 @@ private fun CreateGroupDialog(
 
     AlertDialog(
         onDismissRequest = onDismiss,
-        title = { Text("New group") },
+        title = { Text(stringResource(R.string.new_group)) },
         text = {
             OutlinedTextField(
                 value = text,
                 onValueChange = { text = it },
-                label = { Text("Group name") },
+                label = { Text(stringResource(R.string.group_name)) },
                 singleLine = true
             )
         },
         confirmButton = {
             TextButton(
                 onClick = { if (text.isNotBlank()) onConfirm(text) },
-            ) { Text("Create") }
+            ) { Text(stringResource(R.string.create)) }
         },
         dismissButton = {
-            TextButton(onClick = onDismiss) { Text("Cancel") }
+            TextButton(onClick = onDismiss) { Text(stringResource(R.string.cancel)) }
         }
     )
 }
