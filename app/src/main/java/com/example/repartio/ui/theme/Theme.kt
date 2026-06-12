@@ -1,53 +1,80 @@
 package com.example.repartio.ui.theme
 
-import android.app.Activity
-import android.os.Build
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.darkColorScheme
-import androidx.compose.material3.dynamicDarkColorScheme
-import androidx.compose.material3.dynamicLightColorScheme
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.platform.LocalContext
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.hilt.navigation.compose.hiltViewModel
+import com.example.repartio.ui.viewmodel.ThemeViewModel
 
-private val DarkColorScheme = darkColorScheme(
-    primary = Purple80,
-    secondary = PurpleGrey80,
-    tertiary = Pink80
+private val OceanLightColors = lightColorScheme(
+    primary = OceanPrimary,
+    secondary = OceanSecondary,
+    tertiary = OceanTertiary,
+    background = OceanBackground,
+    surface = OceanSurface
 )
 
-private val LightColorScheme = lightColorScheme(
-    primary = Purple40,
-    secondary = PurpleGrey40,
-    tertiary = Pink40
+private val OceanDarkColors = darkColorScheme(
+    primary = OceanPrimaryDark,
+    secondary = OceanSecondaryDark,
+    background = OceanBackgroundDark,
+    surface = OceanSurfaceDark
+)
 
-    /* Other default colors to override
-    background = Color(0xFFFFFBFE),
-    surface = Color(0xFFFFFBFE),
-    onPrimary = Color.White,
-    onSecondary = Color.White,
-    onTertiary = Color.White,
-    onBackground = Color(0xFF1C1B1F),
-    onSurface = Color(0xFF1C1B1F),
-    */
+private val ForestLightColors = lightColorScheme(
+    primary = ForestPrimary,
+    secondary = ForestSecondary,
+    tertiary = ForestTertiary,
+    background = ForestBackground,
+    surface = ForestSurface
+)
+
+private val ForestDarkColors = darkColorScheme(
+    primary = ForestPrimaryDark,
+    secondary = ForestSecondaryDark,
+    background = ForestBackgroundDark,
+    surface = ForestSurfaceDark
+)
+
+private val SunsetLightColors = lightColorScheme(
+    primary = SunsetPrimary,
+    secondary = SunsetSecondary,
+    tertiary = SunsetTertiary,
+    background = SunsetBackground,
+    surface = SunsetSurface
+)
+
+private val SunsetDarkColors = darkColorScheme(
+    primary = SunsetPrimaryDark,
+    secondary = SunsetSecondaryDark,
+    background = SunsetBackgroundDark,
+    surface = SunsetSurfaceDark
 )
 
 @Composable
 fun RepartioTheme(
-    darkTheme: Boolean = isSystemInDarkTheme(),
-    // Dynamic color is available on Android 12+
-    dynamicColor: Boolean = true,
+    themeViewModel: ThemeViewModel = hiltViewModel(),
     content: @Composable () -> Unit
 ) {
-    val colorScheme = when {
-        dynamicColor && Build.VERSION.SDK_INT >= Build.VERSION_CODES.S -> {
-            val context = LocalContext.current
-            if (darkTheme) dynamicDarkColorScheme(context) else dynamicLightColorScheme(context)
-        }
+    val currentTheme by themeViewModel.currentTheme.collectAsState(initial = AppTheme.OCEAN)
+    val darkModePreference by themeViewModel.darkModePreference.collectAsState(initial = DarkModePreference.SYSTEM)
+    val systemDarkTheme = isSystemInDarkTheme()
 
-        darkTheme -> DarkColorScheme
-        else -> LightColorScheme
+    // Determina modo segun  preferencia del usuario
+    val darkTheme = when (darkModePreference) {
+        DarkModePreference.SYSTEM -> systemDarkTheme
+        DarkModePreference.LIGHT -> false
+        DarkModePreference.DARK -> true
+    }
+
+    val colorScheme = when (currentTheme) {
+        AppTheme.OCEAN -> if (darkTheme) OceanDarkColors else OceanLightColors
+        AppTheme.FOREST -> if (darkTheme) ForestDarkColors else ForestLightColors
+        AppTheme.SUNSET -> if (darkTheme) SunsetDarkColors else SunsetLightColors
     }
 
     MaterialTheme(

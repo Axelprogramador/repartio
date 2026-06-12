@@ -17,16 +17,31 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.repartio.R
 import com.example.repartio.domain.model.Group
 import com.example.repartio.ui.viewmodel.GroupViewModel
+import androidx.compose.material.icons.filled.Settings
+import androidx.compose.material3.TopAppBar
 
+
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 fun GroupListScreen(
     onGroupClick: (Long) -> Unit,
+    onSettingsClick: () -> Unit,
     viewModel: GroupViewModel = hiltViewModel()
 ) {
     val groups by viewModel.groups.collectAsState()
     var showDialog by remember { mutableStateOf(false) }
 
     Scaffold(
+        topBar = {
+            TopAppBar(
+                title = { Text(stringResource(R.string.app_name)) },
+                actions = {
+                    IconButton(onClick = onSettingsClick) {
+                        Icon(Icons.Default.Settings, contentDescription = stringResource(R.string.settings))
+                    }
+                }
+            )
+        },
         floatingActionButton = {
             FloatingActionButton(onClick = { showDialog = true }) {
                 Icon(Icons.Default.Add, contentDescription = stringResource(R.string.add_group))
@@ -34,12 +49,6 @@ fun GroupListScreen(
         }
     ) { padding ->
         Column(modifier = Modifier.padding(padding)) {
-            Text(
-                text = stringResource(R.string.app_name),
-                style = MaterialTheme.typography.headlineMedium,
-                modifier = Modifier.padding(16.dp)
-            )
-
             if (groups.isEmpty()) {
                 Box(modifier = Modifier.fillMaxSize(), contentAlignment = Alignment.Center) {
                     Text(
@@ -64,8 +73,10 @@ fun GroupListScreen(
     if (showDialog) {
         CreateGroupDialog(
             onConfirm = { name ->
-                viewModel.createGroup(name)
-                showDialog = false
+                viewModel.createGroup(name) { groupId ->
+                    showDialog = false
+                    onGroupClick(groupId)
+                }
             },
             onDismiss = { showDialog = false }
         )

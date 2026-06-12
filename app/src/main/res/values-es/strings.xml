@@ -10,6 +10,25 @@
     <string name="name">Nombre</string>
     <string name="amount">Importe</string>
     <string name="description">Descripción</string>
+    <string name="settings">Ajustes</string>
+
+    <!-- Temas -->
+    <string name="theme">Tema</string>
+    <string name="theme_ocean">Océano</string>
+    <string name="theme_forest">Bosque</string>
+    <string name="theme_sunset">Atardecer</string>
+    <string name="appearance">Apariencia</string>
+    <string name="dark_mode">Modo oscuro</string>
+    <string name="dark_mode_system">Sistema</string>
+    <string name="dark_mode_light">Claro</string>
+    <string name="dark_mode_dark">Oscuro</string>
+
+    <!-- Idiomas -->
+    <string name="language">Idioma</string>
+    <string name="open_language_settings">Abrir ajustes de idioma</string>
+    <string name="language_english">English</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_hint">Elige el idioma de la app</string>
 
     <!-- Pantalla lista de grupos -->
     <string name="no_groups_yet">Sin grupos. ¡Crea uno!</string>

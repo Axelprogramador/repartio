@@ -27,9 +27,10 @@ class GroupViewModel @Inject constructor(
             initialValue = emptyList()
         )
 
-    fun createGroup(name: String) {
+    fun createGroup(name: String, onCreated: (Long) -> Unit) {
         viewModelScope.launch {
-            createGroupUseCase(name)
+            val id = createGroupUseCase(name)
+            onCreated(id)
         }
     }
 

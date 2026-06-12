@@ -13,8 +13,12 @@ navigationCompose = "2.9.0"
 hilt = "2.56.1"
 hiltNavigation = "1.2.0"
 ksp = "2.0.21-1.0.28"
+datastore = "1.1.1"
+appcompat = "1.7.0"
 
 [libraries]
+androidx-appcompat = { group = "androidx.appcompat", name = "appcompat", version.ref = "appcompat" }
+androidx-datastore = { group = "androidx.datastore", name = "datastore-preferences", version.ref = "datastore" }
 androidx-core-ktx = { group = "androidx.core", name = "core-ktx", version.ref = "coreKtx" }
 junit = { group = "junit", name = "junit", version.ref = "junit" }
 androidx-junit = { group = "androidx.test.ext", name = "junit", version.ref = "junitVersion" }
