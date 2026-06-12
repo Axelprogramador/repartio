@@ -8,6 +8,7 @@ import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.automirrored.filled.ArrowBack
 import androidx.compose.material.icons.filled.Add
+import androidx.compose.material.icons.filled.Delete
 import androidx.compose.material.icons.filled.Person
 import androidx.compose.material3.*
 import androidx.compose.runtime.*
@@ -17,6 +18,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.repartio.domain.model.Member
 import com.example.repartio.ui.viewmodel.GroupDetailViewModel
+import formatCurrency
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
@@ -27,6 +29,7 @@ fun GroupDetailScreen(
     val members by viewModel.members.collectAsState()
     val expenses by viewModel.expenses.collectAsState()
     val settlements by viewModel.settlements.collectAsState()
+    val group by viewModel.group.collectAsState()
 
     var showAddMemberDialog by remember { mutableStateOf(false) }
     var showAddExpenseDialog by remember { mutableStateOf(false) }
@@ -34,7 +37,7 @@ fun GroupDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text("Group") },
+                title = { Text(group?.name ?: "") },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = "Back")
@@ -66,16 +69,22 @@ fun GroupDetailScreen(
                 .padding(horizontal = 16.dp)
         ) {
             item {
-                Text("Members", style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(vertical = 8.dp))
+                Text(
+                    "Members",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
             }
             items(members) { member ->
                 Text("• ${member.name}", modifier = Modifier.padding(vertical = 4.dp))
             }
 
             item {
-                Text("Expenses", style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(vertical = 8.dp))
+                Text(
+                    "Expenses",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
             }
             if (expenses.isEmpty()) {
                 item { Text("No expenses yet", style = MaterialTheme.typography.bodyMedium) }
@@ -84,16 +93,41 @@ fun GroupDetailScreen(
                     val payerName = members.find { it.id == expense.payerId }?.name ?: ""
                     ListItem(
                         headlineContent = { Text(expense.description) },
-                        supportingContent = { Text("Paid by $payerName") },
-                        trailingContent = { Text("%.2f€".format(expense.amount)) }
+                        supportingContent = {
+                            Column {
+                                Text("Paid by $payerName")
+                                // Muestra el desglose de participantes si existe
+                                if (expense.participants.isNotEmpty()) {
+                                    expense.participants.forEach { participant ->
+                                        val memberName = members.find { it.id == participant.memberId }?.name ?: ""
+                                        Text(
+                                            text = "  $memberName: ${formatCurrency(participant.amountOwed)}",
+                                            style = MaterialTheme.typography.bodySmall,
+                                            color = MaterialTheme.colorScheme.secondary
+                                        )
+                                    }
+                                }
+                            }
+                        },
+                        trailingContent = {
+                            Row(verticalAlignment = Alignment.CenterVertically) {
+                                Text(formatCurrency(expense.amount))
+                                IconButton(onClick = { viewModel.deleteExpense(expense) }) {
+                                    Icon(Icons.Default.Delete, contentDescription = "Delete expense")
+                                }
+                            }
+                        }
                     )
                     HorizontalDivider()
                 }
             }
 
             item {
-                Text("Settlements", style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(vertical = 8.dp))
+                Text(
+                    "Settlements",
+                    style = MaterialTheme.typography.titleMedium,
+                    modifier = Modifier.padding(vertical = 8.dp)
+                )
             }
             if (settlements.isEmpty()) {
                 item { Text("Everyone is even!", style = MaterialTheme.typography.bodyMedium) }
@@ -129,12 +163,13 @@ fun GroupDetailScreen(
 
 @Composable
 private fun SettlementItem(settlement: com.example.repartio.domain.usecase.Settlement) {
-    Card(modifier = Modifier
-        .fillMaxWidth()
-        .padding(vertical = 4.dp)
+    Card(
+        modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = 4.dp)
     ) {
         Text(
-            text = "${settlement.fromMemberName} → ${settlement.toMemberName}: %.2f€".format(settlement.amount),
+            text = "${settlement.fromMemberName} → ${settlement.toMemberName}: ${formatCurrency(settlement.amount)}",
             modifier = Modifier.padding(12.dp)
         )
     }
@@ -283,7 +318,7 @@ private fun AddExpenseDialog(
                             val amountDouble = amount.toDoubleOrNull() ?: 0.0
                             val share = if (selectedCount > 0) amountDouble / selectedCount else 0.0
                             Text(
-                                text = "%.2f€".format(share),
+                                text = formatCurrency(share),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.secondary
                             )
@@ -307,7 +342,6 @@ private fun AddExpenseDialog(
                         selectedMembers.map { it to share }
                     }
                     SplitMode.CUSTOM -> {
-                        // Separamos los que tienen cantidad manual de los que no
                         val withCustom = selectedMembers.filter { memberId ->
                             customAmounts[memberId]?.toDoubleOrNull() != null
                         }
@@ -315,14 +349,12 @@ private fun AddExpenseDialog(
                             customAmounts[memberId]?.toDoubleOrNull() == null
                         }
 
-                        // Restamos las cantidades manuales del total
                         val assignedAmount = withCustom.sumOf { customAmounts[it]!!.toDouble() }
                         val remaining = amountDouble - assignedAmount
 
-                        // Si las cantidades manuales superan el total, no confirmamos
                         if (remaining < -0.01) return@TextButton
+                        if (withoutCustom.isEmpty() && Math.abs(remaining) > 0.01) return@TextButton
 
-                        // El resto se reparte equitativamente entre los sin cantidad manual
                         val shareForRest = if (withoutCustom.isNotEmpty()) remaining / withoutCustom.size else 0.0
 
                         withCustom.map { it to customAmounts[it]!!.toDouble() } +
