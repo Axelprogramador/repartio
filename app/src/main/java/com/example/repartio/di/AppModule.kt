@@ -1,6 +1,7 @@
 package com.example.repartio.di
 
 import android.content.Context
+import com.example.repartio.ui.theme.CurrencyManager
 import com.example.repartio.ui.theme.LanguageManager
 import dagger.Module
 import dagger.Provides
@@ -18,4 +19,10 @@ object AppModule {
     fun provideLanguageManager(
         @ApplicationContext context: Context
     ): LanguageManager = LanguageManager(context)
+
+    @Provides
+    @Singleton
+    fun provideCurrencyManager(
+        @ApplicationContext context: Context
+    ): CurrencyManager = CurrencyManager(context)
 }

@@ -20,6 +20,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.repartio.R
 import com.example.repartio.ui.theme.AppLanguage
 import com.example.repartio.ui.theme.AppTheme
+import com.example.repartio.ui.theme.CurrencyPreference
 import com.example.repartio.ui.theme.DarkModePreference
 import com.example.repartio.ui.theme.ForestPrimary
 import com.example.repartio.ui.theme.ForestSecondary
@@ -38,6 +39,7 @@ fun SettingsScreen(
     val currentTheme by themeViewModel.currentTheme.collectAsState(initial = AppTheme.OCEAN)
     val darkModePreference by themeViewModel.darkModePreference.collectAsState(initial = DarkModePreference.SYSTEM)
     val currentLanguage by themeViewModel.currentLanguage.collectAsState()
+    val currentCurrency by themeViewModel.currencyPreference.collectAsState(initial = CurrencyPreference.AUTO)
 
     Scaffold(
         topBar = {
@@ -56,7 +58,7 @@ fun SettingsScreen(
                 .padding(padding)
                 .padding(horizontal = 16.dp)
                 .verticalScroll(rememberScrollState()),
-            verticalArrangement = Arrangement.spacedBy(24.dp)
+            verticalArrangement = Arrangement.spacedBy(14.dp)
         ) {
             Spacer(modifier = Modifier.height(8.dp))
 
@@ -147,6 +149,36 @@ fun SettingsScreen(
             }
 
             Spacer(modifier = Modifier.height(8.dp))
+
+
+            // Sección moneda
+            SettingsSection(title = stringResource(R.string.currency)) {
+                Text(
+                    stringResource(R.string.currency_hint),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant,
+                    modifier = Modifier.padding(bottom = 12.dp)
+                )
+                FlowRow(
+                    horizontalArrangement = Arrangement.spacedBy(8.dp),
+                    verticalArrangement = Arrangement.spacedBy(8.dp)
+                ) {
+                    CurrencyPreference.entries.forEach { currency ->
+                        FilterChip(
+                            selected = currentCurrency == currency,
+                            onClick = { themeViewModel.setCurrency(currency) },
+                            label = {
+                                Text(
+                                    if (currency == CurrencyPreference.AUTO)
+                                        stringResource(R.string.currency_auto)
+                                    else
+                                        "${currency.symbol} ${currency.code}"
+                                )
+                            }
+                        )
+                    }
+                }
+            }
         }
     }
 }

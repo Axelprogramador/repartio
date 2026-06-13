@@ -30,6 +30,16 @@
     <string name="language_spanish">Español</string>
     <string name="language_hint">Elige el idioma de la app</string>
 
+    <!-- Moneda -->
+    <string name="currency">Moneda</string>
+    <string name="currency_hint">Elige la moneda para mostrar los importes</string>
+    <string name="currency_auto">Auto (dispositivo)</string>
+
+    <!-- Members -->
+    <string name="no_members_yet">Sin miembros. ¡Añade uno!</string>
+    <string name="show_details">Ver detalles</string>
+    <string name="hide_details">Ocultar detalles</string>
+
     <!-- Pantalla lista de grupos -->
     <string name="no_groups_yet">Sin grupos. ¡Crea uno!</string>
     <string name="new_group">Nuevo grupo</string>

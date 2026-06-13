@@ -7,6 +7,8 @@ import com.example.repartio.domain.model.Expense
 import com.example.repartio.domain.model.Member
 import com.example.repartio.domain.repository.GroupRepository
 import com.example.repartio.domain.usecase.*
+import com.example.repartio.ui.theme.CurrencyManager
+import com.example.repartio.ui.theme.CurrencyPreference
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -20,7 +22,8 @@ class GroupDetailViewModel @Inject constructor(
     private val addExpenseUseCase: AddExpenseUseCase,
     private val calculateBalancesUseCase: CalculateBalancesUseCase,
     private val deleteExpenseUseCase: DeleteExpenseUseCase,
-    private val groupRepository: GroupRepository,  // nuevo
+    private val groupRepository: GroupRepository,
+    private val currencyManager: CurrencyManager,
     savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
@@ -40,12 +43,15 @@ class GroupDetailViewModel @Inject constructor(
         groupRepository.getGroupById(groupId)?.let { emit(it) }
     }.stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), null)
 
+    val currencyPreference = currencyManager.currencyPreference
+        .stateIn(viewModelScope, SharingStarted.WhileSubscribed(5000), CurrencyPreference.AUTO)
+
     fun addMember(name: String) {
         viewModelScope.launch {
             addMemberUseCase(groupId, name)
         }
     }
-    
+
     fun addExpense(
         payerId: Long,
         description: String,

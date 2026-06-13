@@ -30,6 +30,17 @@
     <string name="language_spanish">Español</string>
     <string name="language_hint">Choose the app language</string>
 
+
+    <!-- Members -->
+    <string name="no_members_yet">No members yet. Add one!</string>
+    <string name="show_details">Show details</string>
+    <string name="hide_details">Hide details</string>
+
+    <!-- Currency -->
+    <string name="currency">Currency</string>
+    <string name="currency_hint">Choose the currency to display amounts</string>
+    <string name="currency_auto">Auto (device)</string>
+
     <!-- Group list screen -->
     <string name="no_groups_yet">No groups yet. Create one!</string>
     <string name="new_group">New group</string>

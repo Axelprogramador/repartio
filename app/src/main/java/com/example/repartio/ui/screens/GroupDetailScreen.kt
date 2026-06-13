@@ -4,6 +4,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.rememberScrollState
+import androidx.compose.foundation.shape.CircleShape
+import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.foundation.text.KeyboardOptions
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.icons.Icons
@@ -16,12 +18,14 @@ import androidx.compose.runtime.*
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.input.KeyboardType
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.repartio.R
 import com.example.repartio.domain.model.Member
 import com.example.repartio.ui.FormatUtils.formatCurrency
+import com.example.repartio.ui.theme.CurrencyPreference
 import com.example.repartio.ui.viewmodel.GroupDetailViewModel
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -34,6 +38,7 @@ fun GroupDetailScreen(
     val expenses by viewModel.expenses.collectAsState()
     val settlements by viewModel.settlements.collectAsState()
     val group by viewModel.group.collectAsState()
+    val currencyPreference by viewModel.currencyPreference.collectAsState()
 
     var showAddMemberDialog by remember { mutableStateOf(false) }
     var showAddExpenseDialog by remember { mutableStateOf(false) }
@@ -41,12 +46,15 @@ fun GroupDetailScreen(
     Scaffold(
         topBar = {
             TopAppBar(
-                title = { Text(group?.name ?: "") },
+                title = { Text(group?.name ?: "", fontWeight = FontWeight.Bold) },
                 navigationIcon = {
                     IconButton(onClick = onBack) {
                         Icon(Icons.AutoMirrored.Filled.ArrowBack, contentDescription = stringResource(R.string.back))
                     }
-                }
+                },
+                colors = TopAppBarDefaults.topAppBarColors(
+                    containerColor = MaterialTheme.colorScheme.surface
+                )
             )
         },
         floatingActionButton = {
@@ -58,95 +66,112 @@ fun GroupDetailScreen(
                     onClick = { showAddMemberDialog = true },
                     icon = { Icon(Icons.Default.Person, contentDescription = null) },
                     text = { Text(stringResource(R.string.add_member)) },
+                    containerColor = MaterialTheme.colorScheme.secondaryContainer
                 )
                 ExtendedFloatingActionButton(
                     onClick = { showAddExpenseDialog = true },
                     icon = { Icon(Icons.Default.Add, contentDescription = null) },
-                    text = { Text(stringResource(R.string.add_expense)) },
+                    text = { Text(stringResource(R.string.add_expense)) }
                 )
             }
-        }
+        },
+        containerColor = MaterialTheme.colorScheme.background
     ) { padding ->
         LazyColumn(
             modifier = Modifier
+                .fillMaxSize()
                 .padding(padding)
-                .padding(horizontal = 16.dp)
+                .padding(horizontal = 16.dp),
+            verticalArrangement = Arrangement.spacedBy(16.dp),
+            contentPadding = PaddingValues(vertical = 16.dp)
         ) {
             item {
-                Text(
-                    stringResource(R.string.members),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-            }
-            items(members) { member ->
-                Text("• ${member.name}", modifier = Modifier.padding(vertical = 4.dp))
-            }
-
-            item {
-                Text(
-                    stringResource(R.string.expenses),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-            }
-            if (expenses.isEmpty()) {
-                item {
-                    Text(
-                        stringResource(R.string.no_expenses_yet),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
-                }
-            } else {
-                items(expenses) { expense ->
-                    val payerName = members.find { it.id == expense.payerId }?.name ?: ""
-                    ListItem(
-                        headlineContent = { Text(expense.description) },
-                        supportingContent = {
-                            Column {
-                                Text(stringResource(R.string.paid_by, payerName))
-                                if (expense.participants.isNotEmpty()) {
-                                    expense.participants.forEach { participant ->
-                                        val memberName = members.find { it.id == participant.memberId }?.name ?: ""
-                                        Text(
-                                            text = "  $memberName: ${formatCurrency(participant.amountOwed)}",
-                                            style = MaterialTheme.typography.bodySmall,
-                                            color = MaterialTheme.colorScheme.secondary
-                                        )
+                SectionCard(title = stringResource(R.string.members)) {
+                    if (members.isEmpty()) {
+                        Text(
+                            stringResource(R.string.no_members_yet),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    } else {
+                        FlowRow(
+                            horizontalArrangement = Arrangement.spacedBy(8.dp),
+                            verticalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            members.forEachIndexed { index, member ->
+                                val chipColors = listOf(
+                                    MaterialTheme.colorScheme.primary,
+                                    MaterialTheme.colorScheme.secondary,
+                                    MaterialTheme.colorScheme.tertiary
+                                )
+                                val color = chipColors[index % chipColors.size]
+                                SuggestionChip(
+                                    onClick = {},
+                                    label = { Text(member.name) },
+                                    icon = {
+                                        Surface(
+                                            shape = CircleShape,
+                                            color = color,
+                                            modifier = Modifier.size(8.dp)
+                                        ) {}
                                     }
-                                }
-                            }
-                        },
-                        trailingContent = {
-                            Row(verticalAlignment = Alignment.CenterVertically) {
-                                Text(formatCurrency(expense.amount))
-                                IconButton(onClick = { viewModel.deleteExpense(expense) }) {
-                                    Icon(Icons.Default.Delete, contentDescription = stringResource(R.string.delete_expense))
-                                }
+                                )
                             }
                         }
-                    )
-                    HorizontalDivider()
+                    }
                 }
             }
 
             item {
-                Text(
-                    stringResource(R.string.settlements),
-                    style = MaterialTheme.typography.titleMedium,
-                    modifier = Modifier.padding(vertical = 8.dp)
-                )
-            }
-            if (settlements.isEmpty()) {
-                item {
-                    Text(
-                        stringResource(R.string.everyone_is_even),
-                        style = MaterialTheme.typography.bodyMedium
-                    )
+                SectionCard(title = stringResource(R.string.expenses)) {
+                    if (expenses.isEmpty()) {
+                        Text(
+                            stringResource(R.string.no_expenses_yet),
+                            style = MaterialTheme.typography.bodyMedium,
+                            color = MaterialTheme.colorScheme.onSurfaceVariant
+                        )
+                    } else {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            expenses.forEach { expense ->
+                                val payerName = members.find { it.id == expense.payerId }?.name ?: ""
+                                ExpenseItem(
+                                    description = expense.description,
+                                    amount = formatCurrency(expense.amount, currencyPreference),
+                                    payerName = payerName,
+                                    participants = expense.participants.map { participant ->
+                                        val name = members.find { it.id == participant.memberId }?.name ?: ""
+                                        name to formatCurrency(participant.amountOwed, currencyPreference)
+                                    },
+                                    onDelete = { viewModel.deleteExpense(expense) }
+                                )
+                            }
+                        }
+                    }
                 }
-            } else {
-                items(settlements) { settlement ->
-                    SettlementItem(settlement)
+            }
+
+            item {
+                SectionCard(title = stringResource(R.string.settlements)) {
+                    if (settlements.isEmpty()) {
+                        Row(
+                            verticalAlignment = Alignment.CenterVertically,
+                            horizontalArrangement = Arrangement.spacedBy(8.dp)
+                        ) {
+                            Text("✓", style = MaterialTheme.typography.titleMedium,
+                                color = MaterialTheme.colorScheme.primary)
+                            Text(
+                                stringResource(R.string.everyone_is_even),
+                                style = MaterialTheme.typography.bodyMedium,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant
+                            )
+                        }
+                    } else {
+                        Column(verticalArrangement = Arrangement.spacedBy(8.dp)) {
+                            settlements.forEach { settlement ->
+                                SettlementItem(settlement, currencyPreference)
+                            }
+                        }
+                    }
                 }
             }
         }
@@ -165,6 +190,7 @@ fun GroupDetailScreen(
     if (showAddExpenseDialog) {
         AddExpenseDialog(
             members = members,
+            currencyPreference = currencyPreference,
             onConfirm = { payerId, description, amount, participants ->
                 viewModel.addExpense(payerId, description, amount, participants)
                 showAddExpenseDialog = false
@@ -175,16 +201,130 @@ fun GroupDetailScreen(
 }
 
 @Composable
-private fun SettlementItem(settlement: com.example.repartio.domain.usecase.Settlement) {
-    Card(
+private fun SectionCard(
+    title: String,
+    content: @Composable ColumnScope.() -> Unit
+) {
+    Column {
+        Text(
+            text = title,
+            style = MaterialTheme.typography.titleMedium,
+            fontWeight = FontWeight.SemiBold,
+            color = MaterialTheme.colorScheme.primary,
+            modifier = Modifier.padding(bottom = 8.dp)
+        )
+        Card(
+            modifier = Modifier.fillMaxWidth(),
+            shape = RoundedCornerShape(16.dp),
+            elevation = CardDefaults.cardElevation(defaultElevation = 2.dp),
+            colors = CardDefaults.cardColors(containerColor = MaterialTheme.colorScheme.surface)
+        ) {
+            Column(modifier = Modifier.padding(16.dp)) {
+                content()
+            }
+        }
+    }
+}
+
+@Composable
+private fun ExpenseItem(
+    description: String,
+    amount: String,
+    payerName: String,
+    participants: List<Pair<String, String>>,
+    onDelete: () -> Unit
+) {
+    var expanded by remember { mutableStateOf(false) }
+
+    Column {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Column(modifier = Modifier.weight(1f)) {
+                Text(description, style = MaterialTheme.typography.bodyLarge, fontWeight = FontWeight.Medium)
+                Text(
+                    stringResource(R.string.paid_by, payerName),
+                    style = MaterialTheme.typography.bodySmall,
+                    color = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+            Text(
+                amount,
+                style = MaterialTheme.typography.bodyLarge,
+                fontWeight = FontWeight.SemiBold,
+                color = MaterialTheme.colorScheme.primary
+            )
+            IconButton(onClick = onDelete) {
+                Icon(
+                    Icons.Default.Delete,
+                    contentDescription = stringResource(R.string.delete_expense),
+                    tint = MaterialTheme.colorScheme.onSurfaceVariant
+                )
+            }
+        }
+        if (participants.isNotEmpty()) {
+            TextButton(
+                onClick = { expanded = !expanded },
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Text(
+                    if (expanded) stringResource(R.string.hide_details)
+                    else stringResource(R.string.show_details),
+                    style = MaterialTheme.typography.bodySmall
+                )
+            }
+            if (expanded) {
+                Column(modifier = Modifier.padding(start = 8.dp)) {
+                    participants.forEach { (name, amount) ->
+                        Row(
+                            modifier = Modifier.fillMaxWidth(),
+                            horizontalArrangement = Arrangement.SpaceBetween
+                        ) {
+                            Text(name, style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                            Text(amount, style = MaterialTheme.typography.bodySmall,
+                                color = MaterialTheme.colorScheme.onSurfaceVariant)
+                        }
+                    }
+                }
+            }
+        }
+        HorizontalDivider(modifier = Modifier.padding(top = 8.dp))
+    }
+}
+
+@Composable
+private fun SettlementItem(
+    settlement: com.example.repartio.domain.usecase.Settlement,
+    currencyPreference: CurrencyPreference
+) {
+    Surface(
+        shape = RoundedCornerShape(8.dp),
+        color = MaterialTheme.colorScheme.surfaceVariant,
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = 4.dp)
     ) {
-        Text(
-            text = "${settlement.fromMemberName} → ${settlement.toMemberName}: ${formatCurrency(settlement.amount)}",
-            modifier = Modifier.padding(12.dp)
-        )
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .padding(horizontal = 12.dp, vertical = 10.dp),
+            horizontalArrangement = Arrangement.SpaceBetween,
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                "${settlement.fromMemberName} → ${settlement.toMemberName}",
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Medium
+            )
+            Text(
+                formatCurrency(settlement.amount, currencyPreference),
+                style = MaterialTheme.typography.bodyMedium,
+                fontWeight = FontWeight.Bold,
+                color = MaterialTheme.colorScheme.primary
+            )
+        }
     }
 }
 
@@ -202,7 +342,8 @@ private fun AddMemberDialog(
                 value = name,
                 onValueChange = { name = it },
                 label = { Text(stringResource(R.string.name)) },
-                singleLine = true
+                singleLine = true,
+                modifier = Modifier.fillMaxWidth()
             )
         },
         confirmButton = {
@@ -220,6 +361,7 @@ private fun AddMemberDialog(
 @Composable
 private fun AddExpenseDialog(
     members: List<Member>,
+    currencyPreference: CurrencyPreference,
     onConfirm: (Long, String, Double, List<Pair<Long, Double>>) -> Unit,
     onDismiss: () -> Unit
 ) {
@@ -306,7 +448,6 @@ private fun AddExpenseDialog(
                         label = { Text(stringResource(R.string.custom_amounts)) }
                     )
                 }
-                // Descripción del modo seleccionado para guiar al usuario
                 Text(
                     text = if (splitMode == SplitMode.EQUAL)
                         stringResource(R.string.split_equally_hint)
@@ -326,10 +467,7 @@ private fun AddExpenseDialog(
                             checked = participantSelected[member.id] == true,
                             onCheckedChange = { participantSelected[member.id] = it }
                         )
-                        Text(
-                            text = member.name,
-                            modifier = Modifier.weight(1f)
-                        )
+                        Text(text = member.name, modifier = Modifier.weight(1f))
                         if (splitMode == SplitMode.CUSTOM && participantSelected[member.id] == true) {
                             OutlinedTextField(
                                 value = customAmounts[member.id] ?: "",
@@ -344,7 +482,7 @@ private fun AddExpenseDialog(
                             val amountDouble = amount.toDoubleOrNull() ?: 0.0
                             val share = if (selectedCount > 0) amountDouble / selectedCount else 0.0
                             Text(
-                                text = formatCurrency(share),
+                                text = formatCurrency(share, currencyPreference),
                                 style = MaterialTheme.typography.bodySmall,
                                 color = MaterialTheme.colorScheme.secondary
                             )
@@ -374,20 +512,15 @@ private fun AddExpenseDialog(
                         val withoutCustom = selectedMembers.filter { memberId ->
                             customAmounts[memberId]?.toDoubleOrNull() == null
                         }
-
                         val assignedAmount = withCustom.sumOf { customAmounts[it]!!.toDouble() }
                         val remaining = amountDouble - assignedAmount
-
                         if (remaining < -0.01) return@TextButton
                         if (withoutCustom.isEmpty() && Math.abs(remaining) > 0.01) return@TextButton
-
                         val shareForRest = if (withoutCustom.isNotEmpty()) remaining / withoutCustom.size else 0.0
-
                         withCustom.map { it to customAmounts[it]!!.toDouble() } +
                                 withoutCustom.map { it to shareForRest }
                     }
                 }
-
                 onConfirm(payer.id, description, amountDouble, participants)
             }) { Text(stringResource(R.string.add)) }
         },
