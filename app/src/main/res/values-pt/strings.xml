@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Repartio</string>
+
+    <!-- Geral -->
+    <string name="add">Adicionar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="create">Criar</string>
+    <string name="back">Voltar</string>
+    <string name="name">Nome</string>
+    <string name="amount">Valor</string>
+    <string name="description">Descrição</string>
+
+    <!-- Lista de grupos -->
+    <string name="no_groups_yet">Ainda sem grupos. Crie um!</string>
+    <string name="new_group">Novo grupo</string>
+    <string name="group_name">Nome do grupo</string>
+    <string name="add_group">Adicionar grupo</string>
+    <string name="delete_group">Eliminar grupo</string>
+
+    <!-- Detalhe do grupo -->
+    <string name="members">Membros</string>
+    <string name="expenses">Despesas</string>
+    <string name="settlements">Liquidações</string>
+    <string name="no_expenses_yet">Ainda sem despesas</string>
+    <string name="everyone_is_even">Todos estão quites!</string>
+    <string name="paid_by">Pago por %s</string>
+    <string name="add_member">Adicionar membro</string>
+    <string name="add_expense">Adicionar despesa</string>
+    <string name="delete_expense">Eliminar despesa</string>
+    <string name="no_members_yet">Ainda sem membros. Adicione um!</string>
+    <string name="show_details">Ver detalhes</string>
+    <string name="hide_details">Ocultar detalhes</string>
+
+    <!-- Diálogo de despesa -->
+    <string name="total_amount">Valor total</string>
+    <string name="paid_by_label">Pago por</string>
+    <string name="split_mode">Modo de divisão</string>
+    <string name="split_equally">Dividir igualmente</string>
+    <string name="split_equally_hint">O total é dividido igualmente entre os participantes selecionados</string>
+    <string name="custom_amounts">Valores personalizados</string>
+    <string name="custom_amounts_hint">Define valores específicos. Deixa em branco para distribuir o resto automaticamente</string>
+    <string name="equal">Igual</string>
+    <string name="custom">Personalizado</string>
+    <string name="participants">Participantes</string>
+
+    <!-- Definições -->
+    <string name="settings">Definições</string>
+    <string name="appearance">Aparência</string>
+    <string name="theme">Tema</string>
+    <string name="theme_ocean">Oceano</string>
+    <string name="theme_forest">Floresta</string>
+    <string name="theme_sunset">Pôr do sol</string>
+    <string name="dark_mode">Modo escuro</string>
+    <string name="dark_mode_system">Sistema</string>
+    <string name="dark_mode_light">Claro</string>
+    <string name="dark_mode_dark">Escuro</string>
+    <string name="language">Idioma</string>
+    <string name="language_hint">Escolhe o idioma da aplicação</string>
+    <string name="language_english">English</string>
+    <string name="language_spanish">Español</string>
+    <string name="currency">Moeda</string>
+    <string name="currency_hint">Escolhe a moeda para mostrar os valores</string>
+    <string name="currency_auto">Auto (dispositivo)</string>
+</resources>

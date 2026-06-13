@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Repartio</string>
+
+    <!-- Général -->
+    <string name="add">Ajouter</string>
+    <string name="cancel">Annuler</string>
+    <string name="create">Créer</string>
+    <string name="back">Retour</string>
+    <string name="name">Nom</string>
+    <string name="amount">Montant</string>
+    <string name="description">Description</string>
+
+    <!-- Liste des groupes -->
+    <string name="no_groups_yet">Pas encore de groupes. Créez-en un !</string>
+    <string name="new_group">Nouveau groupe</string>
+    <string name="group_name">Nom du groupe</string>
+    <string name="add_group">Ajouter un groupe</string>
+    <string name="delete_group">Supprimer le groupe</string>
+
+    <!-- Détail du groupe -->
+    <string name="members">Membres</string>
+    <string name="expenses">Dépenses</string>
+    <string name="settlements">Règlements</string>
+    <string name="no_expenses_yet">Pas encore de dépenses</string>
+    <string name="everyone_is_even">Tout le monde est quitte !</string>
+    <string name="paid_by">Payé par %s</string>
+    <string name="add_member">Ajouter un membre</string>
+    <string name="add_expense">Ajouter une dépense</string>
+    <string name="delete_expense">Supprimer la dépense</string>
+    <string name="no_members_yet">Pas encore de membres. Ajoutez-en un !</string>
+    <string name="show_details">Voir les détails</string>
+    <string name="hide_details">Masquer les détails</string>
+
+    <!-- Dialog dépense -->
+    <string name="total_amount">Montant total</string>
+    <string name="paid_by_label">Payé par</string>
+    <string name="split_mode">Mode de partage</string>
+    <string name="split_equally">Partage égal</string>
+    <string name="split_equally_hint">Le total est divisé également entre les participants sélectionnés</string>
+    <string name="custom_amounts">Montants personnalisés</string>
+    <string name="custom_amounts_hint">Définissez des montants spécifiques. Laissez vide pour répartir le reste automatiquement</string>
+    <string name="equal">Égal</string>
+    <string name="custom">Personnalisé</string>
+    <string name="participants">Participants</string>
+
+    <!-- Paramètres -->
+    <string name="settings">Paramètres</string>
+    <string name="appearance">Apparence</string>
+    <string name="theme">Thème</string>
+    <string name="theme_ocean">Océan</string>
+    <string name="theme_forest">Forêt</string>
+    <string name="theme_sunset">Coucher de soleil</string>
+    <string name="dark_mode">Mode sombre</string>
+    <string name="dark_mode_system">Système</string>
+    <string name="dark_mode_light">Clair</string>
+    <string name="dark_mode_dark">Sombre</string>
+    <string name="language">Langue</string>
+    <string name="language_hint">Choisissez la langue de l\'application</string>
+    <string name="language_english">English</string>
+    <string name="language_spanish">Español</string>
+    <string name="currency">Devise</string>
+    <string name="currency_hint">Choisissez la devise pour afficher les montants</string>
+    <string name="currency_auto">Auto (appareil)</string>
+</resources>

@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Repartio</string>
+
+    <!-- 共通 -->
+    <string name="add">追加</string>
+    <string name="cancel">キャンセル</string>
+    <string name="create">作成</string>
+    <string name="back">戻る</string>
+    <string name="name">名前</string>
+    <string name="amount">金額</string>
+    <string name="description">説明</string>
+
+    <!-- グループ一覧 -->
+    <string name="no_groups_yet">グループがありません。作成しましょう！</string>
+    <string name="new_group">新しいグループ</string>
+    <string name="group_name">グループ名</string>
+    <string name="add_group">グループを追加</string>
+    <string name="delete_group">グループを削除</string>
+
+    <!-- グループ詳細 -->
+    <string name="members">メンバー</string>
+    <string name="expenses">費用</string>
+    <string name="settlements">精算</string>
+    <string name="no_expenses_yet">費用がありません</string>
+    <string name="everyone_is_even">全員精算済みです！</string>
+    <string name="paid_by">%s が支払い</string>
+    <string name="add_member">メンバーを追加</string>
+    <string name="add_expense">費用を追加</string>
+    <string name="delete_expense">費用を削除</string>
+    <string name="no_members_yet">メンバーがいません。追加しましょう！</string>
+    <string name="show_details">詳細を表示</string>
+    <string name="hide_details">詳細を非表示</string>
+
+    <!-- 費用ダイアログ -->
+    <string name="total_amount">合計金額</string>
+    <string name="paid_by_label">支払い者</string>
+    <string name="split_mode">分割方法</string>
+    <string name="split_equally">均等に分割</string>
+    <string name="split_equally_hint">合計金額を選択した参加者で均等に分割します</string>
+    <string name="custom_amounts">カスタム金額</string>
+    <string name="custom_amounts_hint">各自の金額を設定。空白の場合は残りを自動配分します</string>
+    <string name="equal">均等</string>
+    <string name="custom">カスタム</string>
+    <string name="participants">参加者</string>
+
+    <!-- 設定 -->
+    <string name="settings">設定</string>
+    <string name="appearance">外観</string>
+    <string name="theme">テーマ</string>
+    <string name="theme_ocean">オーシャン</string>
+    <string name="theme_forest">フォレスト</string>
+    <string name="theme_sunset">サンセット</string>
+    <string name="dark_mode">ダークモード</string>
+    <string name="dark_mode_system">システム</string>
+    <string name="dark_mode_light">ライト</string>
+    <string name="dark_mode_dark">ダーク</string>
+    <string name="language">言語</string>
+    <string name="language_hint">アプリの言語を選択</string>
+    <string name="language_english">English</string>
+    <string name="language_spanish">Español</string>
+    <string name="currency">通貨</string>
+    <string name="currency_hint">金額表示に使用する通貨を選択</string>
+    <string name="currency_auto">自動（デバイス）</string>
+</resources>

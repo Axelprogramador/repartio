@@ -11,7 +11,13 @@ import javax.inject.Singleton
 enum class AppLanguage(val tag: String, val displayName: String) {
     SYSTEM("", "System"),
     ENGLISH("en", "English"),
-    SPANISH("es", "Español")
+    SPANISH("es", "Español"),
+    FRENCH("fr", "Français"),
+    GERMAN("de", "Deutsch"),
+    PORTUGUESE("pt", "Português"),
+    CHINESE("zh", "中文"),
+    JAPANESE("ja", "日本語"),
+    KOREAN("ko", "한국어")
 }
 
 @Singleton

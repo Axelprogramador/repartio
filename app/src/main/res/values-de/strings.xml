@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">Repartio</string>
+
+    <!-- Allgemein -->
+    <string name="add">Hinzufügen</string>
+    <string name="cancel">Abbrechen</string>
+    <string name="create">Erstellen</string>
+    <string name="back">Zurück</string>
+    <string name="name">Name</string>
+    <string name="amount">Betrag</string>
+    <string name="description">Beschreibung</string>
+
+    <!-- Gruppenliste -->
+    <string name="no_groups_yet">Noch keine Gruppen. Erstelle eine!</string>
+    <string name="new_group">Neue Gruppe</string>
+    <string name="group_name">Gruppenname</string>
+    <string name="add_group">Gruppe hinzufügen</string>
+    <string name="delete_group">Gruppe löschen</string>
+
+    <!-- Gruppendetail -->
+    <string name="members">Mitglieder</string>
+    <string name="expenses">Ausgaben</string>
+    <string name="settlements">Abrechnungen</string>
+    <string name="no_expenses_yet">Noch keine Ausgaben</string>
+    <string name="everyone_is_even">Alle sind quitt!</string>
+    <string name="paid_by">Bezahlt von %s</string>
+    <string name="add_member">Mitglied hinzufügen</string>
+    <string name="add_expense">Ausgabe hinzufügen</string>
+    <string name="delete_expense">Ausgabe löschen</string>
+    <string name="no_members_yet">Noch keine Mitglieder. Füge eines hinzu!</string>
+    <string name="show_details">Details anzeigen</string>
+    <string name="hide_details">Details ausblenden</string>
+
+    <!-- Ausgaben-Dialog -->
+    <string name="total_amount">Gesamtbetrag</string>
+    <string name="paid_by_label">Bezahlt von</string>
+    <string name="split_mode">Aufteilungsmodus</string>
+    <string name="split_equally">Gleichmäßig aufteilen</string>
+    <string name="split_equally_hint">Der Gesamtbetrag wird gleichmäßig auf die ausgewählten Teilnehmer aufgeteilt</string>
+    <string name="custom_amounts">Benutzerdefinierte Beträge</string>
+    <string name="custom_amounts_hint">Lege spezifische Beträge fest. Leer lassen für automatische Verteilung</string>
+    <string name="equal">Gleich</string>
+    <string name="custom">Benutzerdefiniert</string>
+    <string name="participants">Teilnehmer</string>
+
+    <!-- Einstellungen -->
+    <string name="settings">Einstellungen</string>
+    <string name="appearance">Erscheinungsbild</string>
+    <string name="theme">Thema</string>
+    <string name="theme_ocean">Ozean</string>
+    <string name="theme_forest">Wald</string>
+    <string name="theme_sunset">Sonnenuntergang</string>
+    <string name="dark_mode">Dunkelmodus</string>
+    <string name="dark_mode_system">System</string>
+    <string name="dark_mode_light">Hell</string>
+    <string name="dark_mode_dark">Dunkel</string>
+    <string name="language">Sprache</string>
+    <string name="language_hint">Wähle die App-Sprache</string>
+    <string name="language_english">English</string>
+    <string name="language_spanish">Español</string>
+    <string name="currency">Währung</string>
+    <string name="currency_hint">Wähle die Währung für die Anzeige der Beträge</string>
+    <string name="currency_auto">Auto (Gerät)</string>
+</resources>

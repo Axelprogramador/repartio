@@ -14,7 +14,7 @@ enum class CurrencyPreference(val code: String, val symbol: String) {
     USD("USD", "$"),
     EUR("EUR", "€"),
     GBP("GBP", "£"),
-    JPY("JPY", "¥"),
+    JPY("", "¥"),
     BRL("BRL", "R$"),
     MXN("MXN", "MX$")
 }

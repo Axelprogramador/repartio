@@ -124,9 +124,10 @@ fun SettingsScreen(
                         color = MaterialTheme.colorScheme.onSurfaceVariant,
                         modifier = Modifier.padding(bottom = 12.dp)
                     )
-                    Row(
+
+                    FlowRow(
                         horizontalArrangement = Arrangement.spacedBy(8.dp),
-                        modifier = Modifier.fillMaxWidth()
+                        verticalArrangement = Arrangement.spacedBy(8.dp)
                     ) {
                         AppLanguage.entries.forEach { language ->
                             FilterChip(
@@ -136,19 +137,22 @@ fun SettingsScreen(
                                     Text(
                                         when (language) {
                                             AppLanguage.SYSTEM -> stringResource(R.string.dark_mode_system)
-                                            AppLanguage.ENGLISH -> stringResource(R.string.language_english)
-                                            AppLanguage.SPANISH -> stringResource(R.string.language_spanish)
+                                            AppLanguage.ENGLISH -> "English"
+                                            AppLanguage.SPANISH -> "Español"
+                                            AppLanguage.FRENCH -> "Français"
+                                            AppLanguage.GERMAN -> "Deutsch"
+                                            AppLanguage.PORTUGUESE -> "Português"
+                                            AppLanguage.CHINESE -> "中文"
+                                            AppLanguage.JAPANESE -> "日本語"
+                                            AppLanguage.KOREAN -> "한국어"
                                         }
                                     )
-                                },
-                                modifier = Modifier.weight(1f)
+                                }
                             )
                         }
                     }
                 }
             }
-
-            Spacer(modifier = Modifier.height(8.dp))
 
 
             // Sección moneda
