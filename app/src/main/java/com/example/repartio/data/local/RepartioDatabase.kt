@@ -18,9 +18,10 @@ import com.example.repartio.data.local.entity.MemberEntity
         ExpenseEntity::class,
         ExpenseParticipantEntity::class
     ],
-    version = 2,  // cambie esquema para mas opciones
+    version = 3,
     exportSchema = false
 )
+
 abstract class RepartioDatabase : RoomDatabase() {
     abstract fun groupDao(): GroupDao
     abstract fun memberDao(): MemberDao

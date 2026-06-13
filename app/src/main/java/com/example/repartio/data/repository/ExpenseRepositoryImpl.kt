@@ -13,6 +13,7 @@ import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.flatMapLatest
 import kotlinx.coroutines.flow.flowOf
 
+@OptIn(kotlinx.coroutines.ExperimentalCoroutinesApi::class)
 class ExpenseRepositoryImpl @Inject constructor(
     private val expenseDao: ExpenseDao,
     private val participantDao: ExpenseParticipantDao

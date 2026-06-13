@@ -28,7 +28,7 @@ object DatabaseModule {
             RepartioDatabase::class.java,
             "repartio.db"
         )
-            .fallbackToDestructiveMigration()  // Para desarrollo, borra y recrea
+            .addMigrations(MIGRATION_2_3)
             .build()
 
     @Provides
@@ -44,19 +44,12 @@ object DatabaseModule {
     fun provideExpenseParticipantDao(db: RepartioDatabase): ExpenseParticipantDao = db.expenseParticipantDao()
 }
 
-private val MIGRATION_1_2 = object : Migration(1, 2) {
+private val MIGRATION_2_3 = object : Migration(2, 3) {
     override fun migrate(database: SupportSQLiteDatabase) {
-        database.execSQL(
-            """
-            CREATE TABLE IF NOT EXISTS expense_participants (
-                id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
-                expenseId INTEGER NOT NULL,
-                memberId INTEGER NOT NULL,
-                amountOwed REAL NOT NULL,
-                FOREIGN KEY (expenseId) REFERENCES expenses(id) ON DELETE CASCADE,
-                FOREIGN KEY (memberId) REFERENCES members(id) ON DELETE CASCADE
-            )
-        """.trimIndent()
-        )
+        database.execSQL("CREATE INDEX IF NOT EXISTS index_members_groupId ON members(groupId)")
+        database.execSQL("CREATE INDEX IF NOT EXISTS index_expenses_groupId ON expenses(groupId)")
+        database.execSQL("CREATE INDEX IF NOT EXISTS index_expenses_payerId ON expenses(payerId)")
+        database.execSQL("CREATE INDEX IF NOT EXISTS index_expense_participants_expenseId ON expense_participants(expenseId)")
+        database.execSQL("CREATE INDEX IF NOT EXISTS index_expense_participants_memberId ON expense_participants(memberId)")
     }
 }

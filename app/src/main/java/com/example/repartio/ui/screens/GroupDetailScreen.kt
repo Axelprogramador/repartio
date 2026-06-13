@@ -416,7 +416,7 @@ private fun AddExpenseDialog(
                         label = { Text(stringResource(R.string.paid_by_label)) },
                         trailingIcon = { ExposedDropdownMenuDefaults.TrailingIcon(payerExpanded) },
                         modifier = Modifier
-                            .menuAnchor()
+                            .menuAnchor(MenuAnchorType.PrimaryNotEditable)
                             .fillMaxWidth()
                     )
                     ExposedDropdownMenu(

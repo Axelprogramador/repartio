@@ -2,6 +2,7 @@ package com.example.repartio.data.local.entity
 
 import androidx.room.Entity
 import androidx.room.ForeignKey
+import androidx.room.Index
 import androidx.room.PrimaryKey
 
 @Entity(
@@ -11,15 +12,16 @@ import androidx.room.PrimaryKey
             entity = ExpenseEntity::class,
             parentColumns = ["id"],
             childColumns = ["expenseId"],
-            onDelete = ForeignKey.CASCADE  // En cascada para que al borrar gasto se borren participants
+            onDelete = ForeignKey.CASCADE
         ),
         ForeignKey(
             entity = MemberEntity::class,
             parentColumns = ["id"],
             childColumns = ["memberId"],
-            onDelete = ForeignKey.CASCADE  // Si se borra miembro, se borra su participacion
+            onDelete = ForeignKey.CASCADE
         )
-    ]
+    ],
+    indices = [Index("expenseId"), Index("memberId")]
 )
 data class ExpenseParticipantEntity(
     @PrimaryKey(autoGenerate = true)
